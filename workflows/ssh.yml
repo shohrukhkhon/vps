@@ -1,0 +1,29 @@
+name: Ubuntu SSH VM
+on:
+  workflow_dispatch:
+defaults:
+  run:
+    shell: bash
+
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+#    - name: If failed, means ok
+#      run: ./not-exist-file.sh it bloke build
+    - name: Preparing GNU/Linux Environment
+      run: sudo apt-get update
+    - name: Setting Up the Ubuntu Environment
+    #  if: ${{ failure() }}
+      run: bash ssh.sh
+      env:
+        USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+        CHROME_HEADLESS_CODE: ${{ secrets.CHROME_HEADLESS_CODE }}
+        MACHINE_NAME: ${{ secrets.MACHINE_NAME }}
+        USERNAME: ${{ secrets.USERNAME }}
+    - name: Keep Running Ubuntu System and keepAlive
+     # if: ${{ failure() }}
+      run: sleep 6h
